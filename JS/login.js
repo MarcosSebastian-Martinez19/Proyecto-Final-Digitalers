@@ -25,15 +25,10 @@ function mostrarDatos() {
         let fila = document.createElement('div')
         fila.classList.add('.login-div')
         let celdaEmail = document.createElement('p')
-        // let celdaPassword = document.createElement('p')
-        // let loguito = document.createElement('p')
-        celdaEmail.innerHTML = "Hola " + personas[i][0]
-        // celdaPassword.innerHTML = personas[i][1]
-        // loguito.innerHTML = ``
+        
+        celdaEmail.innerHTML = personas[i][0]
 
         fila.appendChild(celdaEmail)
-        // fila.appendChild(celdaPassword)
-        // fila.appendChild(loguito)
 
         tbody.appendChild(fila)
     }
@@ -41,8 +36,8 @@ function mostrarDatos() {
     let loginBody = document.querySelector('#login')
     let navbarMainNone = document.querySelector('.navbarMainNone')
     let navbarLeft = document.querySelector('.navbar-left ul')
-    let contenedorPortada = document.querySelector('#portada')
     let contenedorPrincipal = document.querySelector('#principal')
+    let bannerPeliDestacada = document.getElementById('bannerPeliDestacada')
 
     loginBody.classList.remove('login_body')
     loginBody.classList.add('login_body-None')
@@ -51,10 +46,8 @@ function mostrarDatos() {
     navbarLeft.classList.add('navbar')
     contenedorPrincipal.classList.remove('contenedor-principalNone')
     contenedorPrincipal.classList.add('contenedor-principal')
-    contenedorPortada.classList.remove('contenedor-portadaNone')
-    contenedorPortada.classList.add('contenedor-portada')
+    bannerPeliDestacada.classList.remove('bannerPeliDestacadaNone')
 }
-
 
 function registrarPersonaEnSistema(pNuevoUsuario) {
 
@@ -64,8 +57,6 @@ function registrarPersonaEnSistema(pNuevoUsuario) {
     localStorage.setItem("listaPersonasLS", JSON.stringify(listaPersonas))
 }
 
-
-
 function getListasPersonas() {
     let listaPersonasLocal = JSON.parse(localStorage.getItem("listaPersonaLS"));
     if(listaPersonasLocal == null) {
@@ -73,4 +64,3 @@ function getListasPersonas() {
     }
     return listaPersonasLocal;
 }
-
