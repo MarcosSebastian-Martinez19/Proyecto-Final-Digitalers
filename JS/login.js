@@ -9,10 +9,11 @@ function registrar() {
 
     email = document.querySelector('#emailLogin').value;
     password = document.querySelector('#passwordLogin').value;
-
-    usuarios.push(email, password);
-    registrarPersonaEnSistema(usuarios);
-    mostrarDatos()
+    if(email !== "" && password !== "") {
+        usuarios.push(email, password);
+        registrarPersonaEnSistema(usuarios);
+        mostrarDatos()
+    }
 };
 
 function mostrarDatos() {

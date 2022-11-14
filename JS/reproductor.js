@@ -1,77 +1,74 @@
 const IMGPATH = "https://image.tmdb.org/t/p/w1280";
 
-const API_KEY = "694d323fb2e2bf85c217db03d8904a3b"
-
 const MOVIESDETAILS = "https://api.themoviedb.org/3/movie/505642?api_key=694d323fb2e2bf85c217db03d8904a3b&language=en-US"
-
 const MOVIESCREDITS = "https://api.themoviedb.org/3/movie/505642/credits?api_key=694d323fb2e2bf85c217db03d8904a3b&language=en-US"
 
 // const TVSHOWSDETAILS = ""
 // const TVSHOWSCREDITS = ""
 
-const fichaTecnica = document.querySelector('#reproductorPelicula #header')
-const repartos = document.querySelector('#reproductorPelicula #profiles')
+const fichaTecnica = document.querySelector('#reproductorPelicula #site-container #header')
+const repartos = document.querySelector('#reproductorPelicula #site-container #profiles .img-reparto__container')
 
 buscarDetalles(MOVIESDETAILS, fichaTecnica)
-
 
 async function buscarDetalles(url, id) {
     const resp = await fetch(url);
     const respData = await resp.json();
 
-    // Imprimimos en consola la respuesta en Formato JSON
-    console.log(respData);
-    // Del formato JSON seleccionamos results
+    // console.log(respData);
     verDetallesPelis(respData, id);
-
 }
 
 function verDetallesPelis(categoria, idP) {
 
     idP.innerHTML = "";
-
-    const {
+    let {
+        adult,
+        genres,
         backdrop_path,
-        original_language,
         original_title,
         overview,
         release_date,
-        runtime,
-        vote_average,
     } = categoria;
 
+    if(adult == false) {
+        adult = "+18"
+    } else {
+        adult = "Apto Todo Público"
+    }
+
     const movieEl = document.createElement("div");
-    movieEl.classList.add('description')
 
     movieEl.innerHTML = `
-        <img src="${IMGPATH + backdrop_path}"/>
-        <span class="subtitle">Ficha técnica:</span>    
-        <div class="fichaTecnicaPeli">
-                <div class="fichaTecnicaPeli_item">
-                    <span>Lanzamiento:</span>    
-                    <p>${release_date}</p>
-                </div>
-                <div class="fichaTecnicaPeli_item">
-                    <span>Lenguaje:</span>    
-                    <p>${original_language}</p>
-                </div>
-                <div class="fichaTecnicaPeli_item">
-                    <span>Duración:</span>    
-                    <p class"title">${runtime} minutos.</p>
-                </div>
-                <div class="fichaTecnicaPeli_item">
-                    <span>Voto Promedio:</span>    
-                    <p>${vote_average}</p>
-                </div>
-                <div class="fichaTecnicaPeli_item-overview">
-                    <span>Sinopsis:</span>    
-                    <p>${overview}</p>
-                </div>
+    <div class="container-preview" style="background-image: url(${IMGPATH + backdrop_path});">
+        <div class="details-preview">
+            <h1 class="title-preview">${original_title}</h1>
+            <div class="buttons-preview">
+                <button type="button">Quitar <i class="fa-sharp fa-solid fa-xmark"></i></button>
+                <button type="button">Reproducir <i class="fa-regular fa-circle-play"></i></button>
+            </div>
         </div>
-        <div class="fichaTecnicaPeli_Title">    
-            <p>${original_title}</p>
+    </div>
+
+    <div class="description-container">
+        <div class="ficha-tecnica">
+            <h2 class="title-descprition">Ficha técnica:</h2>
+            <p class="genero">Género: <span>${genres[0].name}</span>, <span>${genres[1].name}</span>, <span>${genres[2].name}</span></p>
+            <p class="annio-lanzamiento">Lanzamiento: ${release_date}</p>
+            <p class="clasificacion">Clasificacion: ${adult}</p>
         </div>
-        <button class="play"><i class="fa-regular fa-circle-play"></i> Ver</button>
+
+        <div class="sinopsis">
+            <h2 class="title-descprition">Sinopsis:</h2>
+            <p>${overview}</p>
+        </div>
+    </div>
+
+    <div class="reparto-container">
+        <h2 class="title-reparto">
+            Reparto
+        </h2>
+    </div>
         `
 
     idP.appendChild(movieEl)
@@ -85,9 +82,7 @@ async function buscarCreditos(url, id) {
     const resp = await fetch(url);
     const respData = await resp.json();
 
-    // Imprimimos en consola la respuesta en Formato JSON
-    console.log(respData.cast);
-    // Del formato JSON seleccionamos results
+    // console.log(respData.cast);
     verCreditosPelis(respData.cast, id);
 
 }
@@ -101,19 +96,16 @@ function verCreditosPelis(categoria, idP) {
             original_name,
             profile_path
         } = person;
+        
+        if( profile_path != undefined) {
+            const movieEl = document.createElement("div");
+            movieEl.classList.add('img-reparto')
 
-        const movieEl = document.createElement("div");
-        movieEl.classList.add('profile')
-
-        movieEl.innerHTML = `
-            <div class="profile-content">
-                <div class="profile-pic">
-                    <img class="profile-pic-image" src="${IMGPATH + profile_path}"/>
-                </div>
-                <h3 class="profile-name">${original_name}</h3>
-            </div>
+            movieEl.innerHTML = `
+                <img src="${IMGPATH +profile_path}" alt="">
+                <p>${original_name}</p>
             `
-
-        idP.appendChild(movieEl)
+            idP.appendChild(movieEl)
+        }
     })
 }
