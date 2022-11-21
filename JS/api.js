@@ -14,6 +14,24 @@ buscarPelis(TENDRING, tendencias);
 buscarPelis(TVSHOWS, series);
 buscarPeliDestacada(TENDRING, bannerDestacada);
 
+if (localStorage.getItem('usuarioLista')) {
+    verPelis(JSON.parse(localStorage.getItem('usuarioLista')), miLista, true);
+}
+
+function agregarMiLista (movie) {
+    const usuarioLista = localStorage.getItem('usuarioLista') ? JSON.parse(localStorage.getItem('usuarioLista')) : [];
+    usuarioLista.push(movie);
+    localStorage.setItem('usuarioLista', JSON.stringify(usuarioLista));
+    verPelis(usuarioLista, miLista, true);
+}
+
+function quitarMiLista (movie) {
+    const usuarioLista = localStorage.getItem('usuarioLista') ? JSON.parse(localStorage.getItem('usuarioLista')) : [];
+    const nuevaLista = usuarioLista.filter(m => m.id !== movie.id)
+    localStorage.setItem('usuarioLista', JSON.stringify(nuevaLista));
+    verPelis(nuevaLista, miLista, true);
+}
+
 async function buscarPelis(url, id) {
     const resp = await fetch(url);
     const respData = await resp.json();
@@ -30,7 +48,7 @@ async function buscarPeliDestacada(url, id) {
     verPelisDestacada(respData.results, id)
 }
 
-function verPelis(categoria, idP) {
+function verPelis(categoria, idP, esMiLista) {
     idP.innerHTML = "";
     categoria.forEach((movie) => {
         const {
@@ -48,11 +66,17 @@ function verPelis(categoria, idP) {
                 <div class="content">
                     <p id="nombrePeli">${title || name}</p>
                     <a href="reproductor.html" id="${id}">Ver <i class="fa-regular fa-circle-play"></i></a>
-                    <a id="${id}">Mi Lista <i class="fa-solid fa-plus"></i></a>
+                    <a id="${esMiLista ? 'quitar' : 'agregar'}-${id}">Mi Lista <i class="fa-solid fa-${esMiLista ? 'minus' : 'plus'}"></i></a>
                 </div>
                 <img src="${IMGPATH + poster_path}" alt="${title}">
                 </div>
         `
+
+        if (esMiLista) {
+            movieEl.querySelector(`#quitar-${id}`).onclick = () => quitarMiLista(movie);
+        } else {
+            movieEl.querySelector(`#agregar-${id}`).onclick = () => agregarMiLista(movie);
+        }
 
         idP.appendChild(movieEl)
     })
