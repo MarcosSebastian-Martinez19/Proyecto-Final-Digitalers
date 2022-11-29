@@ -19,7 +19,16 @@ async function buscarDetalles(url, id) {
     verDetallesPelis(respData, id);
 }
 
-function verDetallesPelis(categoria, idP) {
+function quitarMiLista (movie) {
+    const usuarioLista = localStorage.getItem('usuarioLista') ? JSON.parse(localStorage.getItem('usuarioLista')) : [];
+    if (usuarioLista.find(m => m.id == movie.id)) {
+        const nuevaLista = usuarioLista.filter(m => m.id !== movie.id)
+        localStorage.setItem('usuarioLista', JSON.stringify(nuevaLista));
+        alert('La película se eliminó de tu lista')
+    }
+}
+
+function verDetallesPelis(movie, idP) {
 
     idP.innerHTML = "";
     let {
@@ -29,7 +38,8 @@ function verDetallesPelis(categoria, idP) {
         original_title,
         overview,
         release_date,
-    } = categoria;
+        id,
+    } = movie;
 
     if(adult == false) {
         adult = "+18"
@@ -44,7 +54,7 @@ function verDetallesPelis(categoria, idP) {
         <div class="details-preview">
             <h1 class="title-preview">${original_title}</h1>
             <div class="buttons-preview">
-                <button type="button">Quitar <i class="fa-sharp fa-solid fa-xmark"></i></button>
+                <button type="button" id="quitar-${id}">Quitar <i class="fa-sharp fa-solid fa-xmark"></i></button>
                 <button type="button">Reproducir <i class="fa-regular fa-circle-play"></i></button>
             </div>
         </div>
@@ -71,6 +81,8 @@ function verDetallesPelis(categoria, idP) {
     </div>
         `
 
+    movieEl.querySelector(`#quitar-${id}`).onclick = () => quitarMiLista(movie);
+
     idP.appendChild(movieEl)
 }
 
@@ -96,7 +108,7 @@ function verCreditosPelis(categoria, idP) {
             original_name,
             profile_path
         } = person;
-        
+
         if( profile_path != undefined) {
             const movieEl = document.createElement("div");
             movieEl.classList.add('img-reparto')

@@ -124,10 +124,13 @@ nav {
     gap: 10px;
     border: none;
     border-radius: 10px;
+    /*
+    @obs - Acá tenías un CSS incompleto
     -webkit-border-radius: ;
     -moz-border-radius: ;
     -ms-border-radius: ;
     -o-border-radius: ;
+    */
 }
 
 .profile i {
@@ -675,6 +678,7 @@ footer {
     height: 100%;
     border: #fff 5px solid;
     border-radius: 50%;
+    object-fit: cover;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;

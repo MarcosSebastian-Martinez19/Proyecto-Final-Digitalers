@@ -13,6 +13,8 @@ function registrar() {
         usuarios.push(email, password);
         registrarPersonaEnSistema(usuarios);
         mostrarDatos()
+    } else {
+        alert('Complete sus datos');
     }
 };
 
@@ -26,7 +28,7 @@ function mostrarDatos() {
         let fila = document.createElement('div')
         fila.classList.add('.login-div')
         let celdaEmail = document.createElement('p')
-        
+
         celdaEmail.innerHTML = personas[i][0]
 
         fila.appendChild(celdaEmail)
